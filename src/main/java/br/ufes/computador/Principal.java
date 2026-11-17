@@ -1,56 +1,66 @@
 package br.ufes.computador;
 
 import br.ufes.computador.builder.ComputadorBuilder;
+import br.ufes.computador.builder.Diretor;
+import br.ufes.computador.model.Peca;
 import br.ufes.computador.model.Todo;
 
 public class Principal {
 
     public static void main(String[] args) {
-        Todo pcEscritorio = new ComputadorBuilder("PC Escritorio", 120.00)
-                .comGabinete("Gabinete Micro-ATX Slim", 220.00)
-                .comPlacaMae("Placa-mae B660M", 620.00)
-                .comProcessador("Processador Intel Core i3-12100", 690.00)
-                .comMemoriaRam("Memoria RAM 16GB DDR4", 260.00)
-                .comSsd("SSD NVMe 500GB", 240.00)
-                .comFonte("Fonte 400W", 230.00)
-                .comCooler("Cooler Box", 65.00)
-                .comPeriferico("Monitor IPS 23,8 Full HD", 720.00)
-                .comPeriferico("Teclado USB ABNT2", 85.00)
-                .comPeriferico("Mouse Optico USB", 55.00)
-                .build();
+        Diretor diretor = new Diretor();
 
-        Todo pcGamer = new ComputadorBuilder("PC Gamer", 250.00)
-                .comGabinete("Gabinete Gamer Mid Tower", 450.00)
-                .comPlacaMae("Placa-mae Z790 ATX DDR5", 1680.00)
-                .comProcessador("Processador Intel Core i7-14700K", 2490.00)
-                .comMemoriaRam("Memoria RAM 32GB DDR5", 890.00)
-                .comSsd("SSD NVMe 2TB", 950.00)
-                .comPlacaDeVideo("Placa de Video GeForce RTX 4070 Super", 4290.00)
-                .comFonte("Fonte Modular 850W", 720.00)
-                .comCooler("Water Cooler 240mm", 460.00)
-                .comPeriferico("Monitor Gamer 27 165Hz", 1750.00)
-                .comPeriferico("Teclado Mecanico RGB", 380.00)
-                .comPeriferico("Mouse Gamer 26000 DPI", 290.00)
-                .build();
+        ComputadorBuilder builderEscritorio = new ComputadorBuilder("PC Escritorio", 120.00);
+        Todo pcEscritorio = diretor.montarPcEscritorio(builderEscritorio);
+        adicionarPecasEscritorio(pcEscritorio, builderEscritorio);
 
-        Todo pcServidor = new ComputadorBuilder("PC Servidor Web", 350.00)
-                .comGabinete("Gabinete Rack 4U", 1150.00)
-                .comPlacaMae("Placa-mae Servidor C621", 2400.00)
-                .comProcessador("Processador Intel Xeon Silver 4310", 3600.00)
-                .comMemoriaRam("Memoria RAM 64GB DDR4 ECC", 1980.00)
-                .comSsd("SSD Enterprise 1.92TB Unidade 1", 1420.00)
-                .comSsd("SSD Enterprise 1.92TB Unidade 2", 1420.00)
-                .comPlacaDeVideo("Placa de Rede Dual Port 10GbE", 890.00)
-                .comFonte("Fonte Redundante 750W", 1450.00)
-                .comCooler("Cooler Servidor Alto Fluxo", 320.00)
-                .comPeriferico("Monitor LED 19,5", 460.00)
-                .comPeriferico("Teclado Compacto USB", 70.00)
-                .comPeriferico("Mouse Optico Basico USB", 40.00)
-                .build();
+        ComputadorBuilder builderGamer = new ComputadorBuilder("PC Gamer", 250.00);
+        Todo pcGamer = diretor.montarPcGamer(builderGamer);
+        adicionarPecasGamer(pcGamer, builderGamer);
+
+        ComputadorBuilder builderServidor = new ComputadorBuilder("PC Servidor Web", 350.00);
+        Todo pcServidor = diretor.montarPcServidor(builderServidor);
+        adicionarPecasServidor(pcServidor, builderServidor);
 
         imprimirConfiguracao(pcEscritorio);
         imprimirConfiguracao(pcGamer);
         imprimirConfiguracao(pcServidor);
+    }
+
+    private static void adicionarPecasEscritorio(Todo computador, ComputadorBuilder builder) {
+        builder.getPlacaMae().adicionar(new Peca(690.00, "Processador Intel Core i3-12100"));
+        builder.getPlacaMae().adicionar(new Peca(260.00, "Memoria RAM 16GB DDR4"));
+        builder.getPlacaMae().adicionar(new Peca(240.00, "SSD NVMe 500GB"));
+        builder.getGabinete().adicionar(new Peca(230.00, "Fonte 400W"));
+        builder.getGabinete().adicionar(new Peca(65.00, "Cooler Box"));
+        computador.adicionar(new Peca(720.00, "Monitor IPS 23,8 Full HD"));
+        computador.adicionar(new Peca(85.00, "Teclado USB ABNT2"));
+        computador.adicionar(new Peca(55.00, "Mouse Optico USB"));
+    }
+
+    private static void adicionarPecasGamer(Todo computador, ComputadorBuilder builder) {
+        builder.getPlacaMae().adicionar(new Peca(2490.00, "Processador Intel Core i7-14700K"));
+        builder.getPlacaMae().adicionar(new Peca(890.00, "Memoria RAM 32GB DDR5"));
+        builder.getPlacaMae().adicionar(new Peca(950.00, "SSD NVMe 2TB"));
+        builder.getPlacaMae().adicionar(new Peca(4290.00, "Placa de Video GeForce RTX 4070 Super"));
+        builder.getGabinete().adicionar(new Peca(720.00, "Fonte Modular 850W"));
+        builder.getGabinete().adicionar(new Peca(460.00, "Water Cooler 240mm"));
+        computador.adicionar(new Peca(1750.00, "Monitor Gamer 27 165Hz"));
+        computador.adicionar(new Peca(380.00, "Teclado Mecanico RGB"));
+        computador.adicionar(new Peca(290.00, "Mouse Gamer 26000 DPI"));
+    }
+
+    private static void adicionarPecasServidor(Todo computador, ComputadorBuilder builder) {
+        builder.getPlacaMae().adicionar(new Peca(3600.00, "Processador Intel Xeon Silver 4310"));
+        builder.getPlacaMae().adicionar(new Peca(1980.00, "Memoria RAM 64GB DDR4 ECC"));
+        builder.getPlacaMae().adicionar(new Peca(1420.00, "SSD Enterprise 1.92TB Unidade 1"));
+        builder.getPlacaMae().adicionar(new Peca(1420.00, "SSD Enterprise 1.92TB Unidade 2"));
+        builder.getPlacaMae().adicionar(new Peca(890.00, "Placa de Rede Dual Port 10GbE"));
+        builder.getGabinete().adicionar(new Peca(1450.00, "Fonte Redundante 750W"));
+        builder.getGabinete().adicionar(new Peca(320.00, "Cooler Servidor Alto Fluxo"));
+        computador.adicionar(new Peca(460.00, "Monitor LED 19,5"));
+        computador.adicionar(new Peca(70.00, "Teclado Compacto USB"));
+        computador.adicionar(new Peca(40.00, "Mouse Optico Basico USB"));
     }
 
     private static void imprimirConfiguracao(Todo computador) {
